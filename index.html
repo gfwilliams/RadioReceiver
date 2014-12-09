@@ -1,0 +1,29 @@
+<html>
+ <head>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="input/audio.js"></script>
+  <script>var Decoders = [];</script>
+  <script src="decoder/status_socket.js"></script>
+  <script src="decoder/owl.js"></script>
+  <script src="output/xively.js"></script>
+ </head>
+
+ <script> 
+  $(function() {
+    function callback(data) { 
+      console.log(data);
+      if (data.device=="OWL-CMR130" && data.id==62000) {
+        console.log("->Xively");
+        putXively("feedID","apiKey", {  
+          owl_instant : data.instant,
+          owl_accumulated : data.accumulated,
+        });
+      }
+    }
+
+    audioInit(function(data) {
+      Decoders.forEach(function(decoder) { decoder(data, callback); });
+    });
+   });
+ </script>
+</html>
